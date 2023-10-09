@@ -8,4 +8,4 @@ class Transcription(MethodView):
     if not audio_file:
       return "Error Audio file is missing"
     if audio_file:
-      return transcribe(audio=audio_file)
+      return transcribe(audio_file)
