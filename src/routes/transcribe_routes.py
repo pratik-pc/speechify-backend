@@ -1,6 +1,6 @@
 from flask import request
 from flask.views import MethodView
-from src.aws_services.transcription_service import transcribe
+from src.aws_services.transcription_service import Transcribe
 
 class Transcription(MethodView):
   def post(self):
@@ -8,4 +8,5 @@ class Transcription(MethodView):
     if not audio_file:
       return "Error Audio file is missing"
     if audio_file:
-      return transcribe(audio_file)
+      transcribe = Transcribe()
+      return transcribe.transcribe_audio(audio_file)

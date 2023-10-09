@@ -15,10 +15,11 @@ class S3_bucket:
     
 
   def upload(self, audio):
+    filename = 'sample.wav'
     self.client.upload_fileobj(
       audio,
       current_app.config['S3_BUCKET_NAME'],
-      'sample.wav'
+      filename
     )
 
-    return "uploaded successfully"
+    return filename
