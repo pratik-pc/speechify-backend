@@ -1,12 +1,8 @@
 import boto3
+import time
+import requests
 from flask import current_app
 from src.aws_services.s3_service import S3_bucket
-
-def transcribe(audio):
-  s3 = S3_bucket()
-  return s3.upload(audio)
-
-
 
 
 class Transcribe:
@@ -18,17 +14,36 @@ class Transcribe:
       region_name=current_app.config['AWS_REGION']
     )
     self.bucket_name = current_app.config['S3_BUCKET_NAME']
+    self.transcription_response = None
 
-
-  def transcribe_audio(self, audio):
+  def transcribe_audio(self, audio, lang):
     self.s3 = S3_bucket()
     filename = self.s3.upload(audio)
     self.transcription_response = self.transcribe_client.start_transcription_job(
       TranscriptionJobName='transcription-job',
-      LanguageCode='hi-IN',
+      LanguageCode=lang,
       MediaFormat='wav',
       Media={
         'MediaFileUri': f's3://{self.bucket_name}/{filename}'
       }
     )
-    return "success"
+
+  def transcription_text(self):
+    transcription_uri = self.transcription_response['TranscriptionJob']['Transcript']['TranscriptFileUri']
+    transcription_text = requests.get(transcription_uri).json()['results']['transcripts'][0]['transcript']
+    return transcription_text
+  
+
+  def transcribe_waiter(self):
+    while True:
+      response = self.transcribe_client.get_transcription_job(
+        TranscriptionJobName='transcription-job'
+      )
+
+      status = response['TranscriptionJob']['TranscriptionJobStatus']
+
+      if status in ['COMPLETED', 'FAILED']:
+        self.transcription_response = response
+        return status
+
+      time.sleep(2)
