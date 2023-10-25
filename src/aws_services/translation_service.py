@@ -18,4 +18,4 @@ class Translate:
       SourceLanguageCode='hi',
       TargetLanguageCode='en'
     )
-    return translation_response
+    return translation_response["TranslatedText"]

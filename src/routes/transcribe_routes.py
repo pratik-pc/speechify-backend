@@ -1,6 +1,7 @@
 from flask import request
 from flask.views import MethodView
 from src.aws_services.transcription_service import Transcribe
+from src.aws_services.translation_service import Translate
 
 class Transcription(MethodView):
   def post(self):
@@ -14,4 +15,7 @@ class Transcription(MethodView):
       status = transcribe.transcribe_waiter()
       if status == "COMPLETED":
         text = transcribe.transcription_text()
-      return text
+        translate = Translate()
+        translated_text = translate.translate_text(text)
+      return translated_text
+    return "Error"
