@@ -16,6 +16,11 @@ token = os.getenv('discord_token')
 @bot.event
 async def on_ready(): 
   print(f'Logged in as {bot.user.name}')
+  
+@bot.command()
+async def join(ctx):
+    channel = ctx.author.voice.channel
+    await channel.connect()
 
 if __name__ == '__main__':
     bot.run(token)
