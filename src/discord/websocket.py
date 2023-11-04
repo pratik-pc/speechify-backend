@@ -3,6 +3,11 @@ import asyncio
 
 async def handle_connection(websocket, path):
   print(f'New connection from {websocket.remote_address}')
+  while True:
+    await websocket.send("message to discord")
+    await asyncio.sleep(5)
+
+
 
 server = websockets.serve(
     handle_connection,
