@@ -24,6 +24,9 @@ async def on_ready():
     while True:
       message = await websocket.recv()
       print(message)
+      voice_clients = bot.voice_clients
+      voice_client = voice_clients[0]
+      print(voice_client)
   
 @bot.command()
 async def join(ctx):
