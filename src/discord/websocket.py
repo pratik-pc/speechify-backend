@@ -1,11 +1,18 @@
 import websockets
 import asyncio
 
+
+connected_clients = set()
+
 async def handle_connection(websocket, path):
   print(f'New connection from {websocket.remote_address}')
+  connected_clients.add(websocket)
   try:
     async for message in websocket:
-      print(message)
+      await websocket.send(message)
+      for client in connected_clients:
+        if client != websocket:
+          await client.send(message)
 
   except websockets.exceptions.ConnectionClosed:
     print('websocket is closed')
