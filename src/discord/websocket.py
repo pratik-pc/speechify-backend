@@ -3,10 +3,13 @@ import asyncio
 
 async def handle_connection(websocket, path):
   print(f'New connection from {websocket.remote_address}')
-  while True:
-    message = await websocket.recv()
-    print(message)
-    
+  try:
+    async for message in websocket:
+      print(message)
+
+  except websockets.exceptions.ConnectionClosed:
+    print('websocket is closed')
+
 
 
 
