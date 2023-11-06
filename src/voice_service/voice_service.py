@@ -10,5 +10,5 @@ class Voice:
     self.engine.runAndWait()
 
   def save_to_file(self, text):
-    self.engine.save_to_file(text, 'output.wav')
+    self.engine.save_to_file(text, 'src\discord\output.wav')
     self.engine.runAndWait()
