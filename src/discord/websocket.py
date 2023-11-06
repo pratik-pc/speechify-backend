@@ -17,6 +17,8 @@ async def handle_connection(websocket, path):
   except websockets.exceptions.ConnectionClosed:
     print('websocket is closed')
 
+  finally:
+    connected_clients.remove(websocket)
 
 
 
