@@ -32,7 +32,7 @@ async def on_ready():
       voice.save_to_file(json_message['message'])
       voice_clients = bot.voice_clients
       voice_client = voice_clients[0]
-      voice_client.play(discord.FFmpegPCMAudio('output.wav'))
+      voice_client.play(discord.FFmpegPCMAudio('src\discord\output.wav'))
   
 @bot.command()
 async def join(ctx):
