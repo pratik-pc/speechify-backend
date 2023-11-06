@@ -1,10 +1,11 @@
 import websockets
 import asyncio
+import json
 
 
 async def send_message(url):
   async with websockets.connect(url) as websocket:
-    await websocket.send('message from client')
+    await websocket.send(json.dumps({"message": 'message from client'}))
     print('published message')
 
 

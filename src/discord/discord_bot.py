@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import websockets
 import os
+import json
 from dotenv import load_dotenv
 from src.voice_service.voice_service import Voice
 
@@ -27,7 +28,8 @@ async def on_ready():
     while True:
       message = await websocket.recv()
       print(message)
-      voice.save_to_file(message)
+      json_message = json.loads(message)
+      voice.save_to_file(json_message['message'])
       voice_clients = bot.voice_clients
       voice_client = voice_clients[0]
       voice_client.play(discord.FFmpegPCMAudio('output.wav'))
