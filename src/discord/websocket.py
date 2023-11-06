@@ -9,7 +9,6 @@ async def handle_connection(websocket, path):
   connected_clients.add(websocket)
   try:
     async for message in websocket:
-      await websocket.send(message)
       for client in connected_clients:
         if client != websocket:
           await client.send(message)
