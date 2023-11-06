@@ -3,6 +3,7 @@ from discord.ext import commands
 import websockets
 import os
 from dotenv import load_dotenv
+from src.voice_service.voice_service import Voice
 
 load_dotenv()
 
@@ -14,6 +15,8 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 
 token = os.getenv('discord_token')
 
+voice = Voice()
+
 @bot.event
 async def on_ready(): 
   print(f'Logged in as {bot.user.name}')
@@ -24,9 +27,10 @@ async def on_ready():
     while True:
       message = await websocket.recv()
       print(message)
+      voice.save_to_file(message)
       voice_clients = bot.voice_clients
       voice_client = voice_clients[0]
-      print(voice_client)
+      voice_client.play(discord.FFmpegPCMAudio('output.wav'))
   
 @bot.command()
 async def join(ctx):
