@@ -21,7 +21,7 @@ class Transcribe:
     filename = self.s3.upload(audio)
     self.transcription_response = self.transcribe_client.start_transcription_job(
       TranscriptionJobName='transcription-job',
-      LanguageCode='hi-IN',
+      LanguageCode=lang,
       MediaFormat='wav',
       Media={
         'MediaFileUri': f's3://{self.bucket_name}/{filename}'
