@@ -40,4 +40,9 @@ async def join(ctx):
     await channel.connect()
 
 
+@bot.command()
+async def leave(ctx):
+  await ctx.voice_client.disconnect()
+
+
 bot.run(token)
