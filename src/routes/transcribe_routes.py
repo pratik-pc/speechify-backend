@@ -16,6 +16,6 @@ class Transcription(MethodView):
       if status == "COMPLETED":
         text = transcribe.transcription_text()
         translate = Translate()
-        translated_text = translate.translate_text(text)
+        translated_text = translate.translate_text(text, language)
       return translated_text
     return "Error"

@@ -12,10 +12,10 @@ class Translate:
     )
 
 
-  def translate_text(self, text):
+  def translate_text(self, text, language):
     translation_response = self.translate_client.translate_text(
       Text=text,
-      SourceLanguageCode='hi',
+      SourceLanguageCode=language,
       TargetLanguageCode='en'
     )
     return translation_response["TranslatedText"]
