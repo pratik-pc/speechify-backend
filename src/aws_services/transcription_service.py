@@ -1,6 +1,7 @@
 import boto3
 import time
 import requests
+import datetime
 from flask import current_app
 from src.aws_services.s3_service import S3_bucket
 
@@ -15,12 +16,13 @@ class Transcribe:
     )
     self.bucket_name = current_app.config['S3_BUCKET_NAME']
     self.transcription_response = None
+    self.transcription_job_name = 'speechify-job-'+ datetime.datetime.now().strftime("%Y-%m-%dT%H-%M-%S%z") # generate unique job name for aws transcribe
 
   def transcribe_audio(self, audio, lang):
     self.s3 = S3_bucket()
     filename = self.s3.upload(audio)
     self.transcription_response = self.transcribe_client.start_transcription_job(
-      TranscriptionJobName='transcription-job',
+      TranscriptionJobName= self.transcription_job_name,
       LanguageCode=lang,
       MediaFormat='wav',
       Media={
@@ -37,7 +39,7 @@ class Transcribe:
   def transcribe_waiter(self):
     while True:
       response = self.transcribe_client.get_transcription_job(
-        TranscriptionJobName='transcription-job'
+        TranscriptionJobName= self.transcription_job_name
       )
 
       status = response['TranscriptionJob']['TranscriptionJobStatus']
