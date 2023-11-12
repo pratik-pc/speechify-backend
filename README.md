@@ -22,4 +22,5 @@ You can follow these instructions to setup the environment:
   - `S3_BUCKET_NAME`
   - `discord_token`
 4. Run `flask run` in root directory
-5. Speechify service is now running
+5. Run `python src\discord\websocket.py` & `python -m src.discord.discord_bot` in root directory
+6. Speechify service is now running
