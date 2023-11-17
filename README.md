@@ -24,3 +24,11 @@ You can follow these instructions to setup the environment:
 4. Run `flask run` in root directory
 5. Run `python src\discord\websocket.py` & `python -m src.discord.discord_bot` in root directory
 6. Speechify service is now running
+
+## Related Repo
+
+[Speechify GUI](https://github.com/pratik-pc/speechify)
+
+## Need help or any suggestions?
+
+Get in touch with me @ [twitter](https://twitter.com/Pratik24730644) or [linkedin](https://linkedin.com/in/pratik-chanda)
