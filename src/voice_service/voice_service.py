@@ -1,14 +1,7 @@
-import pyttsx3
+from gtts import gTTS
 
 
 class Voice:
-  def __init__(self):
-    self.engine = pyttsx3.init()
-
-  def synthesize(self, text):
-    self.engine.say(text)
-    self.engine.runAndWait()
-
   def save_to_file(self, text):
-    self.engine.save_to_file(text, 'src\discord\output.wav')
-    self.engine.runAndWait()
+    tts = gTTS(text=text, lang='en', slow=False)
+    tts.save('src/discord/output.wav')
