@@ -18,6 +18,8 @@ token = os.getenv('discord_token')
 
 voice = Voice()
 
+voice_channel_list = {}
+
 @bot.event
 async def on_ready(): 
   print(f'Logged in as {bot.user.name}')
@@ -29,20 +31,36 @@ async def on_ready():
       message = await websocket.recv()
       print(message)
       json_message = json.loads(message)
+
+      # Retrieve userid from the message
+      user_id = json_message['user_id']
+
+      # Get the voice channel to which audio streaming is to be done
+      channel_id = voice_channel_list[user_id]
       voice.save_to_file(json_message['message'])
-      voice_clients = bot.voice_clients
-      voice_client = voice_clients[0]
+      voice_channel = bot.get_channel(channel_id)
+
+      # Get the voice client object
+      voice_client = discord.utils.get(bot.voice_clients, channel=voice_channel)
       voice_client.play(discord.FFmpegPCMAudio('src\discord\output.wav'))
   
 @bot.command()
 async def join(ctx):
     channel = ctx.author.voice.channel
-    await channel.connect()
+
+    # Store user details to list of active voice clients
+    channel = await channel.connect()
+    user_id = ctx.author.id
+    channel_id = channel.channel.id
+    voice_channel_list[user_id] = channel_id
 
 
 @bot.command()
 async def leave(ctx):
   await ctx.voice_client.disconnect()
+
+  # Remove user details from list of active voice clients
+  del voice_channel_list[ctx.author.id]
 
 
 bot.run(token)
