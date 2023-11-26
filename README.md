@@ -9,6 +9,10 @@ Speechify offers speech-to-speech translation, allowing users to speak naturally
 
 Integration with Discord allowing users to stream translated audio to discord voice channel
 
+## Software Interface
+
+https://github.com/pratik-pc/speechify-backend/assets/33497322/97861eba-ba98-4a97-a102-5e7ab1ce6141
+
 ## Instructions
 
 You can follow these instructions to setup the environment:
