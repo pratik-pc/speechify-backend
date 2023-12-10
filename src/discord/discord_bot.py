@@ -1,10 +1,10 @@
 import discord
 from discord.ext import commands
-import websockets
 import os
 import json
 from dotenv import load_dotenv
 from src.voice_service.voice_service import Voice
+from aiokafka import AIOKafkaConsumer
 
 load_dotenv()
 
@@ -24,25 +24,28 @@ voice_channel_list = {}
 async def on_ready(): 
   print(f'Logged in as {bot.user.name}')
   url = "ws://127.0.0.1:8000"
+  consumer = AIOKafkaConsumer(
+    'pc',
+    bootstrap_servers='localhost:9092',
+    group_id='p',
+    auto_offset_reset='none'
+  )
+  await consumer.start()
 
-  async with websockets.connect(url) as websocket:
-    print(f'Connected to {url}')
-    while True:
-      message = await websocket.recv()
-      print(message)
-      json_message = json.loads(message)
-
-      # Retrieve userid from the message
-      user_id = json_message['user_id']
-
+  try:
+    async for message in consumer:
+      json_message = json.loads(message.value.decode("utf-8"))
       # Get the voice channel to which audio streaming is to be done
-      channel_id = voice_channel_list[user_id]
+      channel_id = voice_channel_list[json_message['user_id']]
       voice.save_to_file(json_message['message'])
       voice_channel = bot.get_channel(channel_id)
 
       # Get the voice client object
       voice_client = discord.utils.get(bot.voice_clients, channel=voice_channel)
       voice_client.play(discord.FFmpegPCMAudio('src\discord\output.wav'))
+      
+  finally:
+    await consumer.stop()
   
 @bot.command()
 async def join(ctx):
